@@ -139,7 +139,7 @@ Predicted Rainfall: 0.13 mm
 ### Jupyter Notebook
 
 ```bash
-git clone https://github.com/your-username/rainfall-prediction.git
+git clone https://github.com/Sibashis216/Rainfall-Prediction-using-Machine-Learning.git
 cd rainfall-prediction
 pip install pandas numpy matplotlib seaborn scikit-learn notebook
 jupyter notebook Rainfall_Prediction.ipynb
