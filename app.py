@@ -23,12 +23,11 @@ MODEL_DIR = os.path.join(BASE_DIR, "model")
 # On Vercel, /public/** is served directly by the CDN and this route is unused.
 app = Flask(__name__, static_folder="public", static_url_path="")
 
-FEATURE_NAMES = ["year", "tempavg", "DPavg", "humidity avg",
+FEATURE_NAMES = [ "tempavg", "DPavg", "humidity avg",
                   "SLPavg", "visibilityavg", "windavg"]
 
 # Reasonable input bounds used for both frontend sliders and backend validation
 FEATURE_BOUNDS = {
-    "year":          {"min": 1990, "max": 2035, "step": 1,   "unit": ""},
     "tempavg":       {"min": -10,  "max": 45,   "step": 0.1, "unit": "°C"},
     "DPavg":         {"min": -15,  "max": 35,   "step": 0.1, "unit": "°C"},
     "humidity avg":  {"min": 0,    "max": 100,  "step": 0.1, "unit": "%"},

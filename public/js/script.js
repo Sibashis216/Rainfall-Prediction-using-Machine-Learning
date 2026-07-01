@@ -33,7 +33,6 @@
   };
 
   const NICE_NAMES = {
-    "year": "Year",
     "tempavg": "Temperature",
     "DPavg": "Dew Point",
     "humidity avg": "Humidity",
@@ -88,8 +87,7 @@
 
   /* ── Sliders ────────────────────────────────────────── */
   function formatSliderValue(feature, raw) {
-    const isYear = feature === "year";
-    return isYear ? String(Math.round(raw)) : Number(raw).toFixed(1);
+    return Number(raw).toFixed(1);
   }
 
   function bindSliders() {

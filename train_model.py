@@ -28,7 +28,7 @@ DATA_PATH = os.path.join(BASE_DIR, "fall.csv")
 MODEL_DIR = os.path.join(BASE_DIR, "model")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-FEATURE_NAMES = ["year", "tempavg", "DPavg", "humidity avg",
+FEATURE_NAMES = [ "tempavg", "DPavg", "humidity avg",
                   "SLPavg", "visibilityavg", "windavg"]
 
 
@@ -39,7 +39,7 @@ def load_dataset(path: str) -> pd.DataFrame:
             f"next to train_model.py before running this script."
         )
     ds = pd.read_csv(path)
-    ds = ds.drop(["month", "day"], axis=1, errors="ignore")
+    ds = ds.drop(["year", "month", "day"], axis=1, errors="ignore")
     return ds
 
 
@@ -48,8 +48,8 @@ def train():
     ds = load_dataset(DATA_PATH)
     print(f"Dataset shape: {ds.shape}")
 
-    x = ds.iloc[:, :7].values
-    y = ds.iloc[:, 7].values
+    x = ds.iloc[:, :6].values
+    y = ds.iloc[:, 6].values
 
     x_train, x_test, y_train, y_test = train_test_split(
         x, y, test_size=0.20, random_state=0
