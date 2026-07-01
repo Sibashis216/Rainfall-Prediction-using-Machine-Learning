@@ -1,0 +1,8 @@
+fall.csv
+train_model.py
+generate_sample_data.py
+requirements-train.txt
+__pycache__/
+*.pyc
+.venv/
+venv/

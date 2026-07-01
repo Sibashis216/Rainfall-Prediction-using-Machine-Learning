@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rainfall Prediction Station</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="station">
+
+  <!-- ── Header / nameplate ───────────────────────── -->
+  <header class="nameplate">
+    <div class="nameplate-left">
+      <span class="plate-glyph">☔</span>
+      <div>
+        <h1>Rainfall Prediction Station</h1>
+        <p class="plate-sub">Random Forest Regressor &middot; 500 estimators &middot; 7 meteorological inputs</p>
+      </div>
+    </div>
+    <div class="nameplate-right" id="statusLight">
+      <span class="dot"></span>
+      <span id="statusText">Calibrating…</span>
+    </div>
+  </header>
+
+  <!-- ── Main panel: gauge + controls ─────────────── -->
+  <main class="panel-grid">
+
+    <!-- Gauge readout -->
+    <section class="gauge-card">
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 240 150" class="gauge-svg" id="gaugeSvg">
+          <path id="gaugeTrack" d="M 20 130 A 100 100 0 0 1 220 130" />
+          <path id="gaugeFill" d="M 20 130 A 100 100 0 0 1 220 130" />
+          <g id="gaugeTicks"></g>
+          <line id="gaugeNeedle" x1="120" y1="130" x2="120" y2="40" />
+          <circle cx="120" cy="130" r="7" class="gauge-hub" />
+        </svg>
+        <div class="gauge-readout">
+          <span class="mm-value" id="mmValue">0.0</span>
+          <span class="mm-unit">mm</span>
+        </div>
+      </div>
+      <div class="gauge-category" id="gaugeCategory">Awaiting reading</div>
+      <div class="gauge-range" id="gaugeRange">Range: —</div>
+    </section>
+
+    <!-- Controls -->
+    <section class="controls-card">
+      <div class="controls-head">
+        <h2>Instrument Readings</h2>
+        <p>Set today's atmospheric conditions</p>
+      </div>
+
+      <div class="dial-grid">
+        {% for f in features %}
+        {% set b = bounds[f] %}
+        <div class="dial">
+          <div class="dial-label-row">
+            <label for="in_{{ loop.index }}">{{
+              {
+                'year': 'Year',
+                'tempavg': 'Avg Temperature',
+                'DPavg': 'Dew Point Avg',
+                'humidity avg': 'Humidity Avg',
+                'SLPavg': 'Sea-Level Pressure Avg',
+                'visibilityavg': 'Visibility Avg',
+                'windavg': 'Wind Avg'
+              }[f]
+            }}</label>
+            <span class="dial-value" id="val_{{ loop.index }}">–</span>
+          </div>
+          <input
+            type="range"
+            id="in_{{ loop.index }}"
+            class="feature-slider"
+            data-feature="{{ f }}"
+            data-unit="{{ b.unit }}"
+            min="{{ b.min }}" max="{{ b.max }}" step="{{ b.step }}"
+            value="{{ ((b.min | float) + (b.max | float)) / 2 }}"
+          >
+          <div class="dial-scale">
+            <span>{{ b.min }}{{ b.unit }}</span>
+            <span>{{ b.max }}{{ b.unit }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <button id="predictBtn" class="predict-btn">
+        <span>Run Prediction</span>
+      </button>
+      <p class="error-msg" id="errorMsg"></p>
+    </section>
+
+  </main>
+
+  <!-- ── Secondary panel: model diagnostics ───────── -->
+  <section class="diagnostics">
+    <div class="diag-card">
+      <h3>Model Metrics</h3>
+      <div class="metric-row"><span>Training R²</span><span id="metricTrainR2" class="metric-num">–</span></div>
+      <div class="metric-row"><span>Testing R²</span><span id="metricTestR2" class="metric-num">–</span></div>
+      <div class="metric-row"><span>Test MAE</span><span id="metricMae" class="metric-num">–</span></div>
+      <div class="metric-row"><span>Train / Test size</span><span id="metricSizes" class="metric-num">–</span></div>
+    </div>
+
+    <div class="diag-card">
+      <h3>Feature Importance</h3>
+      <div id="importanceBars" class="importance-bars"></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    Built with Flask &amp; scikit-learn · Random Forest Regressor trained on historical rainfall data
+  </footer>
+
+</div>
+
+<script src="/js/script.js"></script>
+</body>
+</html>
